@@ -6,7 +6,7 @@ import torch.nn as nn
 import torchvision.transforms as T
 import torch.nn.functional as F
 import numpy as np
-
+import os
 from transforms import (
     GroupNormalize, GroupScale, GroupCenterCrop, 
     Stack, ToTorchFormatTensor
@@ -50,8 +50,11 @@ def load_intern_action(device):
     for k, v in kinetics_classnames.items():
         kinetics_id_to_classname[k] = v
 
-    model_path = hf_hub_download(repo_id="Andy1621/uniformerv2", filename="k400+k710_uniformerv2_b16_8x224.pyth")
+    #model_path = hf_hub_download(repo_id="Andy1621/uniformerv2", filename="k400+k710_uniformerv2_b16_8x224.pyth")
+    #
     # Pick a pretrained model 
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    model_path = os.path.join(dir_path,'pretrained_models','k400+k710_uniformerv2_b16_8x224.pyth')
     model = Intern_Action(intern_action_b16(pretrained=False, t_size=8, no_lmhra=True, temporal_downsample=False))
     state_dict = torch.load(model_path, map_location=device)
     model.load_state_dict(state_dict)

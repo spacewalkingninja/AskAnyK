@@ -1,4 +1,5 @@
-# VideoChat with StableLM
+## AskAnyK - DeSOTA Implementation for
+# VideoChat with StableLM (Kristian's Edit)
 
 VideoChat is a multifunctional video question answering tool that combines the functions of Action Recognition, Visual Captioning and StableLM. Our solution generates dense, descriptive captions for any object and action in a video, offering a range of language styles to suit different user preferences. It supports users to have conversations in different lengths, emotions, authenticity of language.
 

@@ -164,8 +164,10 @@ ECHO %info_h2% Downloading Ask Anything Kristian Edit Model checkpoints %ansi_en
 IF NOT EXIST %model_checkpoint_path% (
     mkdir %model_checkpoint_path%
 )
-powershell -command "Invoke-WebRequest -Uri https://huggingface.co/spaces/xinyu1205/Tag2Text/resolve/main/tag2text_swin_14m.pth -OutFile .\pretrained_models\tag2text_swin_14m.pth" 
-powershell -command "Invoke-WebRequest -Uri https://datarelease.blob.core.windows.net/grit/models/grit_b_densecap_objectdet.pth -OutFile .\pretrained_models\grit_b_densecap_objectdet.pth" 
+::powershell -command "Invoke-WebRequest -Uri https://huggingface.co/Andy1621/uniformerv2/resolve/main/k400%2Bk710_uniformerv2_b16_8x224.pyth -OutFile .\pretrained_models\grit_b_densecap_objectdet.pth" 
+powershell -command "(New-Object Net.WebClient).DownloadFile("""https://huggingface.co/spaces/xinyu1205/Tag2Text/resolve/main/tag2text_swin_14m.pth""", """%model_path%\pretrained_models\tag2text_swin_14m.pth""")"
+powershell -command "(New-Object Net.WebClient).DownloadFile("""https://datarelease.blob.core.windows.net/grit/models/grit_b_densecap_objectdet.pth""", """%model_path%\pretrained_models\grit_b_densecap_objectdet.pth""")"
+powershell -command "(New-Object Net.WebClient).DownloadFile("""https://huggingface.co/Andy1621/uniformerv2/resolve/main/k400%2Bk710_uniformerv2_b16_8x224.pyth""", """%model_path%\pretrained_models\k400+k710_uniformerv2_b16_8x224.pyth""")"
 ::ECHO.
 
 ::Install Conda Required
@@ -188,6 +190,7 @@ IF %arg2_bool% EQU 1 GOTO noisy_conda
 
 call %conda_path% create --prefix %model_env% python=3.7 -y >NUL 2>NUL
 call %conda_path% activate %model_env% >NUL 2>NUL
+@echo %conda_path% > condapath.txt
 ECHO %info_h2% Step 4/6 - Installing TORCH and Accessories for Environment...%ansi_end% 
 call conda install cudatoolkit=11.6 -c pytorch -c conda-forge -y
 call conda install -c anaconda cudnn -y
@@ -206,6 +209,7 @@ GOTO eo_conda
 :noisy_conda
 call %conda_path% create --prefix %model_env% python=3.7 -y
 call %conda_path% activate %model_env%
+@echo %conda_path% > condapath.txt
 ECHO %info_h2% Step 4/6 - Installing TORCH and Accessories for Environment...%ansi_end% 
 call conda install cudatoolkit=11.6 -c pytorch -c conda-forge -y
 call conda install -c anaconda cudnn -y
@@ -275,6 +279,16 @@ call pip install lvis
 call pip install boto3
 call pip install huggingface_hub==0.16.4
 call pip install desota
+
+call pip uninstall matplotlib -y
+call pip uninstall pillow -y
+call pip uninstall numpy -y
+call pip uninstall scipy -y
+call pip install matplotlib
+call pip install pillow
+call pip install numpy
+call pip install scipy
+
 
 
 :::: MINICONDA ENV DEACTIVATE
